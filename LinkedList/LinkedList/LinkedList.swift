@@ -17,6 +17,13 @@ open class LinkedList<T> {
     
     open var isEmpty: Bool { head == nil }
     
+    public init() {
+    }
+    
+    public init<S: Sequence>(_ value: S? = nil) where S.Element == T {
+        value?.forEach(append)
+    }
+    
     open func prepend(_ value: T) {
         let newNode = Node(value)
         if let head = head {
@@ -54,16 +61,32 @@ open class LinkedList<T> {
         length += 1
     }
     
-    open func remove(at index: Int) {
+    @discardableResult
+    open func remove(at index: Int) -> Node<T>? {
+        guard (0..<length).contains(index) else {
+            return nil
+        }
+        guard index > 0 else {
+            let currentNode = head
+            head = currentNode?.next
+            length -= 1
+            return currentNode
+        }
         let prevNode = getNodeAt(index - 1)
+        let currentNode = prevNode?.next
         let nextNode = prevNode?.next?.next
         prevNode?.next = nextNode
+        if prevNode?.next == nil {
+            tail = prevNode
+        }
         length -= 1
+        return currentNode
     }
     
     open func removeAll() {
         head = nil
         tail = nil
+        length = 0
     }
     
     open func reverse() {
@@ -81,7 +104,7 @@ open class LinkedList<T> {
     }
     
     private func getNodeAt(_ index: Int) -> Node<T>? {
-        guard index > 0, index < length else { return nil }
+        guard index >= 0, index < length else { return nil }
         var returnNode: Node<T>?
         var currentNode = head
         for i in 0...index {
