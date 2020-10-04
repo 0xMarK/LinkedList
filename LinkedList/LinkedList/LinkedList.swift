@@ -121,7 +121,7 @@ open class LinkedList<T> {
 extension LinkedList: CustomStringConvertible {
     
     open var description: String {
-        var desc = "[ "
+        var desc = "["
         var node = head
         while node != nil {
             if let value = node?.value {
@@ -132,7 +132,7 @@ extension LinkedList: CustomStringConvertible {
             }
             node = node?.next
         }
-        desc += " ]"
+        desc += "]"
         return desc
     }
     
